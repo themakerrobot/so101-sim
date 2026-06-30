@@ -193,6 +193,7 @@ const cv=document.getElementById('cv');
 const renderer=new THREE.WebGLRenderer({canvas:cv,antialias:true,preserveDrawingBuffer:true});
 renderer.setPixelRatio(Math.min(devicePixelRatio,2));
 const scene=new THREE.Scene();
+scene.background=new THREE.Color(0xE7EAEC);
 const camera=new THREE.PerspectiveCamera(45,1,.001,500);
 scene.add(new THREE.AmbientLight(0xffffff,.5));
 const dl1=new THREE.DirectionalLight(0xffffff,.85);dl1.position.set(4,9,6);scene.add(dl1);
@@ -306,12 +307,12 @@ async function buildRobot(urdfTxt,fileMap){
     for(const v of link.visuals){const b=basename(v.fn),geo=geos[b];if(!geo)continue;
       const col=(v.rgba&&v.rgba.length>=3)?new THREE.Color(v.rgba[0],v.rgba[1],v.rgba[2]).getHex():getColor(b);
       const mesh=new THREE.Mesh(geo,new THREE.MeshPhongMaterial({color:col,specular:0x111418,shininess:24}));
-      mesh.position.set(...v.origin.xyz);mesh.setRotationFromEuler(new THREE.Euler(...v.origin.rpy,'XYZ'));mesh.scale.set(...v.sc);
+      mesh.position.set(...v.origin.xyz);mesh.setRotationFromEuler(new THREE.Euler(...v.origin.rpy,'ZYX'));mesh.scale.set(...v.sc);
       allMeshes.push(mesh);grp.add(mesh);}
     const ax=new THREE.AxesHelper(.04);ax.visible=false;allAxes.push(ax);grp.add(ax);
     for(const jt of Object.values(joints).filter(j=>j.parent===lname)){
       const jg=new THREE.Group();jg.name='joint:'+jt.name;
-      jg.position.set(...jt.origin.xyz);jg.setRotationFromEuler(new THREE.Euler(...jt.origin.rpy,'XYZ'));
+      jg.position.set(...jt.origin.xyz);jg.setRotationFromEuler(new THREE.Euler(...jt.origin.rpy,'ZYX'));
       jointObjs[jt.name]=jg;baseQs[jt.name]=jg.quaternion.clone();basePs[jt.name]=jg.position.clone();
       const c=mkLink(jt.child);if(c)jg.add(c);grp.add(jg);
     }

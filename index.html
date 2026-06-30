@@ -160,7 +160,7 @@ function parseURDF(xml){
   const mats={};
   doc.querySelectorAll('robot>material').forEach(m=>{const c=m.querySelector('color');if(c&&m.getAttribute('name'))mats[m.getAttribute('name')]=(c.getAttribute('rgba')||'').trim().split(/\s+/).map(Number);});
   const links={},joints={};
-  doc.querySelectorAll('link').forEach(el=>{
+  doc.querySelectorAll('robot>link').forEach(el=>{
     const name=el.getAttribute('name');const visuals=[];
     el.querySelectorAll('visual').forEach(v=>{
       const me=v.querySelector('geometry mesh');if(!me)return;
@@ -172,7 +172,7 @@ function parseURDF(xml){
     });
     links[name]={name,visuals};
   });
-  doc.querySelectorAll('joint').forEach(el=>{
+  doc.querySelectorAll('robot>joint').forEach(el=>{
     const name=el.getAttribute('name'),type=el.getAttribute('type')||'fixed';
     const parent=el.querySelector('parent')?.getAttribute('link')||'';
     const child=el.querySelector('child')?.getAttribute('link')||'';
